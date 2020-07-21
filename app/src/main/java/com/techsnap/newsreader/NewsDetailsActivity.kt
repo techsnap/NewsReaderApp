@@ -17,7 +17,7 @@ class NewsDetailsActivity : AppCompatActivity() {
         val url = intent.getStringExtra("url")
 
         webView = findViewById(R.id.webView)
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = MyWebViewClient()
         webView.loadUrl(url)
 
         webView.settings.javaScriptEnabled = true
@@ -28,6 +28,13 @@ class NewsDetailsActivity : AppCompatActivity() {
             webView.goBack()
         } else {
             super.onBackPressed()
+        }
+    }
+
+    class MyWebViewClient: WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+
         }
     }
 }

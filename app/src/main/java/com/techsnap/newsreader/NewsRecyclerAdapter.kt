@@ -41,7 +41,7 @@ class NewsRecyclerAdapter(val context: Context, val newsList: ArrayList<NewsItem
         val newsItem = newsList[position]
         holder.txtTitle.text = newsItem.title
         holder.txtSource.text = newsItem.source
-        holder.txtDate.text = newsItem.date
+        holder.txtDate.text = newsItem.date.subSequence(0, 10)
         Picasso.get().load(newsItem.imageUrl).error(R.mipmap.ic_launcher).into(holder.imgNewsImage)
 
         holder.txtTitle.setOnClickListener {

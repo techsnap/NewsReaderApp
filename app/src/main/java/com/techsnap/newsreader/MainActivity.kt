@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     // Get data from api using Volley
     fun fetchData() {
         val queue = Volley.newRequestQueue(this@MainActivity)
-        val url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=" + API_KEY
+        val url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=" + API_KEY
 
         val jsonObjectRequest = object : JsonObjectRequest(Request.Method.GET, url, null, Response.Listener {
             Log.e("news", it.toString())

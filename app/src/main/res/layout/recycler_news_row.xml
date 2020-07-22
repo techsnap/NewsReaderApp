@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,9 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="2.5"
-            android:background="@drawable/round_background"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:background="@drawable/round_background"/>
 
     </LinearLayout>
 

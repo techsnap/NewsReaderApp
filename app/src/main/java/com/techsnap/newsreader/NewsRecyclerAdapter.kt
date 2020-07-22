@@ -2,6 +2,7 @@ package com.techsnap.newsreader
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,10 @@ class NewsRecyclerAdapter(val context: Context, val newsList: ArrayList<NewsItem
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.imgNewsImage.clipToOutline = true
+        }
+
         val newsItem = newsList[position]
         holder.txtTitle.text = newsItem.title
         holder.txtSource.text = newsItem.source

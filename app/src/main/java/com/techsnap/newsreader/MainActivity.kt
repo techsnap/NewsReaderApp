@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,23 +29,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fetchData()
+        val url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=" + API_KEY
+        fetchData(url)
 
         recyclerView = findViewById(R.id.newsRecycler)
         layoutManager = LinearLayoutManager(this)
+        recyclerAdapter = NewsRecyclerAdapter(this, newsList)
 
     }
 
-
     // Get data from api using Volley
-    fun fetchData() {
+    fun fetchData(url: String) {
         val queue = Volley.newRequestQueue(this@MainActivity)
-        val url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=" + API_KEY
 
         val jsonObjectRequest = object : JsonObjectRequest(Request.Method.GET, url, null, Response.Listener {
             Log.e("news", it.toString())
-            Log.e("news", "entered request")
             val articles = it.getJSONArray("articles")
+
+            // Clear newsList first
+            newsList.clear()
 
             for (i in 0 until articles.length()) {
                 val article = articles.getJSONObject(i)
@@ -60,9 +64,9 @@ class MainActivity : AppCompatActivity() {
                 newsList.add(newsItem)
             }
             // Pass data to adapter
-            recyclerAdapter = NewsRecyclerAdapter(this, newsList)
             recyclerView.adapter = recyclerAdapter
             recyclerView.layoutManager = layoutManager
+            recyclerAdapter.notifyDataSetChanged()
 
         }, Response.ErrorListener {
             Toast.makeText(this@MainActivity, "Volley Error", Toast.LENGTH_SHORT).show()
@@ -75,5 +79,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         queue.add(jsonObjectRequest)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView?
+
+        searchView?.queryHint = "Search for News"
+        searchView?.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    val url = "http://newsapi.org/v2/everything?q=${query}&apiKey=$API_KEY"
+                    fetchData(url)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            }
+        )
+        return super.onCreateOptionsMenu(menu)
     }
 }
